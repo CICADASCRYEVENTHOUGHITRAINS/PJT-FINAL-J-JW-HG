@@ -18,8 +18,8 @@ public class CardServiceImpl implements CardService {
 
 	// 1. 카드 수집 -> DB에 카드 등록
 	@Override
-	public void postCard() {
-		cardDao.postCard();		
+	public void postCard(Card card) {
+		cardDao.postCard(card);		
 	}
 
 	// 2. 한 유저가 수집한 전체 카드 조회

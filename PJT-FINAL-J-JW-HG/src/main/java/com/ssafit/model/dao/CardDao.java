@@ -6,7 +6,7 @@ import com.ssafit.model.dto.Card;
 
 public interface CardDao {
 	// 1. 카드 수집 -> DB에 카드 등록
-	void postCard();
+	void postCard(Card card);
 	
 	// 2. 한 유저가 수집한 전체 카드 조회
 	/* return:
