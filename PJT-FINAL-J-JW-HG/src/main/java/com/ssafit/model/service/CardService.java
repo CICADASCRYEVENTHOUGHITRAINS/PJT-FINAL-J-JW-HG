@@ -6,7 +6,8 @@ import com.ssafit.model.dto.Card;
 
 public interface CardService {
 	// 1. 카드 수집 -> DB에 카드 등록
-	void postCard(Card card);
+	// int형 반환: 성공하면 1, 실패하면 0
+	int postCard(Card card);
 	
 	// 2. 한 유저가 수집한 전체 카드 조회
 	/* return:

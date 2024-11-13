@@ -17,9 +17,10 @@ public class CardServiceImpl implements CardService {
 	}
 
 	// 1. 카드 수집 -> DB에 카드 등록
+	// int형 반환: 성공하면 1, 실패하면 0
 	@Override
-	public void postCard(Card card) {
-		cardDao.postCard(card);		
+	public int postCard(Card card) {
+		return cardDao.postCard(card);		
 	}
 
 	// 2. 한 유저가 수집한 전체 카드 조회
