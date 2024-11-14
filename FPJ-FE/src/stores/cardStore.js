@@ -3,36 +3,11 @@ import { ref } from 'vue'
 import axios from 'axios'
 
 export const useCardStore = defineStore('card', () => {
-  const REST_PJT_URL_CARDS = `http://localhost:8080/cards/`
-  const REST_PJT_URL_EXERCISE = `http://localhost:8080/excercise/`
+  const REST_PJT_URL_CARDS = `http://localhost:8080/cards`
+  const REST_PJT_URL_EXERCISE = `http://localhost:8080/excercise`
 
-  const userCollectedCardsData = ref([])
+  const userCollectedCardData = ref([])
   const generatedCardStackData = ref([])
-
-  const DUMMY_CARDSTACK_DATA = ref([
-    // DB에서 들어올 때 3개만 들어옴
-    {
-      id: 1,
-      part: '손목',
-      name: '손목 스트레칭',
-      info: '손바닥을 위로 향하게 하고 반대손으로 손가락을 아래로 당기기',
-      time: 30,
-    },
-    {
-      id: 2,
-      part: '목',
-      name: '목 스트레칭',
-      info: '머리를 좌우로 천천히 기울이기',
-      time: 20,
-    },
-    {
-      id: 3,
-      part: '어깨',
-      name: '어깨 스트레칭',
-      info: '어깨를 위아래로 올렸다 내리기',
-      time: 40,
-    },
-  ])
 
   /** 유저별 카드 정보 중 개별 카드 정보를 가져옵니다.
    * @function getCardFromCollectedCardData
@@ -46,35 +21,34 @@ export const useCardStore = defineStore('card', () => {
         url: `${REST_PJT_URL_CARDS}/${cardId}`,
         method: 'GET',
       })
-      const cards = res.data
+      const cards = res.data.value
       console.log(cards)
-      userCollectedCardsData.value = cards
+      userCollectedCardData.value = cards
     } catch (err) {
       console.error(`Error fetching (${err})`)
     }
   }
 
   // userStore 구현 필요 --------------------------------------------------------------------------------
-  // /** 유저별 카드 정보를 가져옵니다.
-  //  * @function getUserCollectedCardData
-  //  * @param {number} id - 유저 고유 id
-  //  * @returns {Promise<Card[]>}
-  //  * @throws {Error}
-  //  */
-  // const getUserCollectedCardData = async (userId) => {
-  //   try {
-  //     const res = await axios({
-  //       url: `${REST_PJT_URL_CARDS}/${userId}`,
-  //       method: 'GET',
-  //     })
-  //     const cards = res.data
-  //     console.log(cards)
-  //     userCollectedCardsData.value = cards
-  //   } catch (err) {
-  //     console.error(`Error fetching (${err})`)
-  //   }
-  // }
-  //
+  /** 유저별 카드 정보를 가져옵니다.
+   * @function getUserCollectedCardData
+   * @param {number} userId - 유저 고유 id
+   * @returns {Promise<Card[]>}
+   * @throws {Error}
+   */
+  const getUserCollectedCardData = async (userId) => {
+    try {
+      const res = await axios({
+        url: `${REST_PJT_URL_CARDS}/${userId}`,
+        method: 'GET',
+      })
+      const cards = res.data
+      userCollectedCardData.value = cards
+    } catch (err) {
+      console.error(`Error fetching (${err})`)
+    }
+  }
+
   // /** 유저의 최근 카드정보를 조회합니다.
   //  * @function getUserRecentCards
   //  * @params {number} userId
@@ -118,5 +92,5 @@ export const useCardStore = defineStore('card', () => {
   //   }
   // }
 
-  return { data, getRandomlySelectedExerciseData, DUMMY_CARDSTACK_DATA }
+  return { userCollectedCardData, getUserCollectedCardData }
 })
