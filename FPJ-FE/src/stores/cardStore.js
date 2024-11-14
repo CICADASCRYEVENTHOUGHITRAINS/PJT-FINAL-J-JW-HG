@@ -23,7 +23,6 @@ export const useCardStore = defineStore('card', () => {
         method: 'GET',
       })
       const cards = res.data.value
-      console.log(cards)
       userCollectedCardData.value = cards
     } catch (err) {
       console.error(`Error fetching (${err})`)
