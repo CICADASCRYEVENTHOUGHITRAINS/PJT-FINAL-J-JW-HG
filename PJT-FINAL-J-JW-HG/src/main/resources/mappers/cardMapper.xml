@@ -28,7 +28,7 @@
 	</select>
 	
 	<!-- 4. get card info 특정 카드 정보 조회 -->
-	<select id="" parameterType="int" resultType="Card">
+	<select id="getCardInfo" parameterType="int" resultType="Card">
 		SELECT * FROM card
 		WHERE user_id = #{userId} 
 		AND id = #{id}

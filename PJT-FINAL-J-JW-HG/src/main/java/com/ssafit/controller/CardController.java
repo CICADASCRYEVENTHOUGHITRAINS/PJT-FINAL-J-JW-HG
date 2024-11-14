@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,8 +30,8 @@ public class CardController {
 	
 	// 1. 카드 수집 -> DB에 카드 등록
 	@PostMapping("")
-	// 와일드 카드 사용으로 String과 Map 둘 다 처리할 수 있게
-	public ResponseEntity<?> postCard(@ModelAttribute Card card) {
+	// 와일드 카드 사용으로 String과 Map 둘 다 처리할 수 있게	
+	public ResponseEntity<?> postCard(@RequestBody Card card) {		
 		// 1. service 호출 -> dao -> db 통신
 		int isSuccess = cardService.postCard(card);
 		
