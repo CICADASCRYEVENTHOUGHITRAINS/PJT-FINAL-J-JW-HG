@@ -78,7 +78,7 @@ public class CardController {
 		List<Card> cardList = cardService.getAllCards(userId);
 		
 		// 조회에 실패했을 경우
-		if(cardList == null || cardList.size() == 0) {
+		if(cardList == null) {
 			System.out.println("카드 데이터가 존재하지 않습니다.");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카드 데이터가 존재하지 않습니다.");
 		}
@@ -105,7 +105,7 @@ public class CardController {
 		List<Card> cardList = cardService.getRecentCards(userId);
 		
 		// 조회에 실패했을 경우
-		if(cardList == null || cardList.size() == 0) {
+		if(cardList == null) {
 			System.out.println("카드 데이터가 존재하지 않습니다.");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카드 데이터가 존재하지 않습니다.");
 		}
