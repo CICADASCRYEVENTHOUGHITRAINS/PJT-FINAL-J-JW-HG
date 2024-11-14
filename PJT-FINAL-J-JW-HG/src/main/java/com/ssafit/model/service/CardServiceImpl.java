@@ -55,8 +55,8 @@ public class CardServiceImpl implements CardService {
 	}]
 	 */	
 	@Override
-	public List<Card> getRecentCards() {
-		List<Card> cardRecentList = cardDao.getRecentCards();
+	public List<Card> getRecentCards(int userId) {
+		List<Card> cardRecentList = cardDao.getRecentCards(userId);
 		
 		// 데이터가 없거나 가져오는 데에 실패했다면
 		if(cardRecentList.size() == 0) return null;

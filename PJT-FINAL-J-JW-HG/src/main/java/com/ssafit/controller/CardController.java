@@ -96,8 +96,16 @@ public class CardController {
 	}]
 	 */
 	@GetMapping("/{userId}/recent")
-	public ResponseEntity<?> getRecentCards() {
-		return null;
+	public ResponseEntity<?> getRecentCards(@PathVariable int userId) {
+		List<Card> cardList = cardService.getRecentCards(userId);
+		
+		// 조회에 실패했을 경우
+		if(cardList == null || cardList.size() == 0) {
+			System.out.println("카드 데이터가 존재하지 않습니다.");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카드 데이터가 존재하지 않습니다.");
+		}
+		
+		return new ResponseEntity<List<Card>>(cardList, HttpStatus.OK);		
 	}
 	
 	// 4. 특정 카드 정보 조회
