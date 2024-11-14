@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
 
-const useCardStore = defineStore('card', () => {
+export const useCardStore = defineStore('card', () => {
   const REST_PJT_URL_CARDS = `http://localhost:8080/cards/`
   const REST_PJT_URL_EXERCISE = `http://localhost:8080/excercise/`
 
