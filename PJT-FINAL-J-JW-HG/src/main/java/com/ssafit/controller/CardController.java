@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,7 +19,7 @@ import com.ssafit.model.service.CardService;
 
 @RestController
 @RequestMapping("/cards")
-@CrossOrigin(origins = "*") // TODO origin 허용할 uri 작성
+@CrossOrigin(origins = {"http://localhost:5173/*", "http://localhost:5174/*"}) // TODO origin 허용할 uri 작성
 public class CardController {
 	private final CardService cardService;
 
@@ -51,6 +50,9 @@ public class CardController {
 		// mapper에서 <keyProperty="id" useGeneratedKeys="true"> 처리해놨기 때문에 객체에 자동으로 AUTO_INCREMENT 값 반영
 		int cardId = card.getId();
 		
+		// user의 total_card_count ++
+		//TODO userService 만든 후 해당 기능 구현하기
+		
 		// 보안을 위해서 객체 자체를 반환하는 것 보다는 id만 반환하고 front에서 다른 api를 통해 요청하는 것이 나을 것
 		// key: value 형태로 id만 반환
 		Map<String, Integer> cardMap = new HashMap<>();
@@ -80,6 +82,9 @@ public class CardController {
 			System.out.println("카드 데이터가 존재하지 않습니다.");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카드 데이터가 존재하지 않습니다.");
 		}
+		
+		// TODO 전체 카드를 조회할 때 user table의 total_card_count와 같은 지 검증,
+		// 다르면 실제 카드 리스트 size로 수정
 		
 		return new ResponseEntity<List<Card>>(cardList, HttpStatus.OK);
 	}
@@ -127,12 +132,8 @@ public class CardController {
 		if(cardInfo == null) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(cardId + "번 카드의 정보 조회에 실패했습니다.");
 		}
-		
-		// key: value 형태로 반환
-		Map<String, Card> infoMap = new HashMap<>();
-		infoMap.put("cardInfo", cardInfo);
-		
-		return new ResponseEntity<Map<String, Card>>(infoMap, HttpStatus.OK);		
+				
+		return new ResponseEntity<Card>(cardInfo, HttpStatus.OK);		
 	}
 	
 }
