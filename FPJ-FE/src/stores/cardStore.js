@@ -7,6 +7,7 @@ export const useCardStore = defineStore('card', () => {
   const REST_PJT_URL_EXERCISE = `http://localhost:8080/excercise`
 
   const userCollectedCardData = ref([])
+  const userRecentlyCollectedCardData = ref([])
   const generatedCardStackData = ref([])
 
   /** 유저별 카드 정보 중 개별 카드 정보를 가져옵니다.
@@ -49,27 +50,25 @@ export const useCardStore = defineStore('card', () => {
     }
   }
 
-  // /** 유저의 최근 카드정보를 조회합니다.
-  //  * @function getUserRecentCards
-  //  * @params {number} userId
-  //  * @returns {Promise<Card[]>}
-  //  * @throws {Error}
-  //  */
-  //
-  // const getUserRecentlyCollectedCards = async (userId) => {
-  //   try {
-  //     const res = await axios({
-  //       url: `${REST_PJT_URL_CARDS}/${userId}`,
-  //       method: 'GET',
-  //     })
-  //     const cards = res.data
-  //     console.log(cards)
-  //     recentCards.value = cards
-  //   } catch (err) {
-  //     console.error(`Error fetching recent card data. (${err})`)
-  //   }
-  // }
-  //
+  /** 유저의 최근 카드정보를 조회합니다.
+   * @function getUserRecentCards
+   * @params {number} userId
+   * @returns {Promise<Card[]>}
+   * @throws {Error}
+   */
+
+  const getUserRecentlyCollectedCardData = async (userId) => {
+    try {
+      const res = await axios({
+        url: `${REST_PJT_URL_CARDS}/${userId}/recent`,
+        method: 'GET',
+      })
+      const cards = res.data
+      userRecentlyCollectedCardData.value = cards
+    } catch (err) {
+      console.error(`Error fetching recent card data. (${err})`)
+    }
+  }
 
   // // exerciseStore로 분리 ----------------------------------------------------------------------------
   // /** 카드에 등록할 운동 정보를 받아옵니다.
@@ -92,5 +91,10 @@ export const useCardStore = defineStore('card', () => {
   //   }
   // }
 
-  return { userCollectedCardData, getUserCollectedCardData }
+  return {
+    userCollectedCardData,
+    userRecentlyCollectedCardData,
+    getUserCollectedCardData,
+    getUserRecentlyCollectedCardData,
+  }
 })

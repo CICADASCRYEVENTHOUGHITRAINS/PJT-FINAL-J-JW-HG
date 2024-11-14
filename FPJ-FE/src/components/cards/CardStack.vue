@@ -12,6 +12,7 @@ const store = useCardStore()
 
 onBeforeMount(async () => {
   await store.getUserCollectedCardData(1)
+  await store.getUserRecentlyCollectedCardData(1)
   console.log(store.userCollectedCardData)
 })
 </script>
