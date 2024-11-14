@@ -1,7 +1,11 @@
 <template>
-  <div></div>
+  <div>
+    <MainView />
+  </div>
 </template>
 
-<script setup></script>
+<script setup>
+import MainView from './views/MainView.vue'
+</script>
 
 <style scoped></style>
