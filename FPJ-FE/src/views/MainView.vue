@@ -1,7 +1,11 @@
 <template>
-  <main>MainView</main>
+  <main>
+    <CardStack />
+  </main>
 </template>
 
-<script setup></script>
+<script setup>
+import CardStack from '@/components/cards/CardStack.vue'
+</script>
 
 <style scoped></style>
