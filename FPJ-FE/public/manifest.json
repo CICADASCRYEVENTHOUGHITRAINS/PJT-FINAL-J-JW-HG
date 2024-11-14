@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Final_PJT_JWHG",
+  "version": "1.0",
+  "description": "",
+  "action": {
+    "default_popup": "../index.html"
+  },
+  "side_panel": {
+    "default_path": "../index.html"
+  },
+  "permissions": ["storage", "activeTab", "scripting", "sidePanel"],
+  "background": {
+    "service_worker": "./service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
