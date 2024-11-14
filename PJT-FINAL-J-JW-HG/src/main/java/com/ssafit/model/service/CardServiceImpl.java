@@ -75,8 +75,8 @@ public class CardServiceImpl implements CardService {
 	}
 	 */
 	@Override
-	public Card getCardInfo(int id) {
-		Card cardInfo = cardDao.getCardInfo(id);
+	public Card getCardInfo(int userId, int id) {
+		Card cardInfo = cardDao.getCardInfo(userId, id);
 		
 		// 데이터가 없거나 가져오는 데에 실패했다면
 		if(cardInfo == null) {

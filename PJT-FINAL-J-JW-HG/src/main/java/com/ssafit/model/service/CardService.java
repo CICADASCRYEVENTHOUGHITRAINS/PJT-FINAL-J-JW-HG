@@ -46,5 +46,5 @@ public interface CardService {
 		collected_date 
 	}
 	 */
-	Card getCardInfo(int id);
+	Card getCardInfo(int userId, int id);
 }
