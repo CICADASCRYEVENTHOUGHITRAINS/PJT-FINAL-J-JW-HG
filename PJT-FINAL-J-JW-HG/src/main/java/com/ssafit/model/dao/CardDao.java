@@ -20,7 +20,7 @@ public interface CardDao {
 		collected_date 
 	}] 
 	 */
-	List<Card> getAllCards();
+	List<Card> getAllCards(int userId);
 	
 	// 3. 한 유저가 수집한 최근 카드 n개 조회
 	/* return:

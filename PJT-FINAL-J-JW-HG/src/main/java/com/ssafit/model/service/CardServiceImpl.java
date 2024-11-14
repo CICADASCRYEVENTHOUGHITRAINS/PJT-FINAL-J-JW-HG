@@ -35,8 +35,8 @@ public class CardServiceImpl implements CardService {
 	}] 
 	 */
 	@Override
-	public List<Card> getAllCards() {
-		List<Card> cardList = cardDao.getAllCards();
+	public List<Card> getAllCards(int userId) {
+		List<Card> cardList = cardDao.getAllCards(userId);
 		// 데이터가 없거나 가져오는 데에 실패했다면
 		if(cardList.size() == 0) return null;
 		

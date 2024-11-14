@@ -1,15 +1,19 @@
 package com.ssafit.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafit.model.dto.Card;
@@ -26,7 +30,7 @@ public class CardController {
 		this.cardService = cardService;
 	}
 	
-	
+//////////////////////////////////////////////////////////////	
 	
 	// 1. 카드 수집 -> DB에 카드 등록
 	@PostMapping("")
@@ -66,6 +70,18 @@ public class CardController {
 		collected_date 
 	}] 
 	 */
+	@GetMapping("/{userId}")
+	public ResponseEntity<?> getAllCards(@PathVariable int userId) {
+		List<Card> cardList = cardService.getAllCards(userId);
+		
+		// 조회에 실패했을 경우
+		if(cardList == null || cardList.size() == 0) {
+			System.out.println("카드 데이터가 존재하지 않습니다.");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카드 데이터가 존재하지 않습니다.");
+		}
+		
+		return new ResponseEntity<List<Card>>(cardList, HttpStatus.OK);
+	}
 	
 	// 3. 한 유저가 수집한 최근 카드 n개 조회
 	/* return:
