@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export const useCardStore = defineStore('card', () => {
   const REST_PJT_URL_CARDS = `http://localhost:8080/cards`
-  const REST_PJT_URL_EXERCISE = `http://localhost:8080/excercise`
+  const REST_PJT_URL_EXERCISE = `http://localhost:8080/exercise`
 
   const userCollectedCardData = ref([{}, {}, {}])
   const userRecentlyCollectedCardData = ref([])
@@ -70,30 +70,31 @@ export const useCardStore = defineStore('card', () => {
   }
 
   // // exerciseStore로 분리 ----------------------------------------------------------------------------
-  // /** 카드에 등록할 운동 정보를 받아옵니다.
-  //  * @function getRandomlySelectedExerciseData
-  //  * @async
-  //  * @returns {Promise<Exercise[]>}
-  //  * @throws {Error}
-  //  */
-  // const getRandomlySelectedExerciseData = async () => {
-  //   try {
-  //     const res = await axios({
-  //       url: `${REST_PJT_URL_EXERCISE}`,
-  //       method: 'GET',
-  //     })
-  //     const excercises = res.data
-  //     console.log(excercises)
-  //     generatedCardStackData.value = excercises
-  //   } catch (err) {
-  //     console.error(`Error fetching excercise data. (${err})`)
-  //   }
-  // }
+  /** 카드에 등록할 운동 정보를 받아옵니다.
+   * @function getRandomlySelectedExerciseData
+   * @async
+   * @returns {Promise<Exercise[]>}
+   * @throws {Error}
+   */
+  const getRandomlySelectedExerciseData = async () => {
+    try {
+      const res = await axios({
+        url: `${REST_PJT_URL_EXERCISE}/random`,
+        method: 'GET',
+      })
+      const excercises = res.data
+      console.log(excercises)
+      generatedCardStackData.value = excercises
+    } catch (err) {
+      console.error(`Error fetching excercise data. (${err})`)
+    }
+  }
 
   return {
     userCollectedCardData,
     userRecentlyCollectedCardData,
     getUserCollectedCardData,
     getUserRecentlyCollectedCardData,
+    getRandomlySelectedExerciseData,
   }
 })
