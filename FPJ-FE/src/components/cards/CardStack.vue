@@ -24,5 +24,6 @@ onBeforeMount(async () => {
   justify-content: center;
   align-items: center;
   gap: 10px;
+  filter: drop-shadow(1px 1px 10px black);
 }
 </style>

@@ -1,11 +1,13 @@
 <template>
-  <div class="card-wrapper" :class="{ flipped: !isFlipped }" @click="flipCard">
-    <div class="card-face back"></div>
+  <div class="card-wrapper" :class="{ flipped: !isFlipped }">
+    <div class="card-face back" @click="flipCard"></div>
     <div class="card-face front">
       <img src="@/assets/test-stretch-icon.png" alt="" />
       <p>{{ data.name }}</p>
       <p>{{ data.info }}</p>
       <p>{{ data.time }} 초</p>
+      <button @click="flipCard">cancel</button>
+      <button>confirm</button>
     </div>
   </div>
 </template>
@@ -26,13 +28,17 @@ const flipCard = () => {
 .card-wrapper {
   --card-width: 200px;
   --card-height: 360px;
+  --base-rotate-angle: 7deg;
+  --flip-angle: 180deg;
+  --width-offset: 160px;
+  --hover-translate: 150px;
+  --hover-rotate: 8deg;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Old versions of Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
 
-  /* --degree: ; */
   /* --highlight-color: ; */
   /* --base-color: ; */
   /* --shadow-color: ; */
@@ -52,11 +58,13 @@ const flipCard = () => {
   --level-color-middle: #fff941;
   --level-color-high: #ff5652;
 }
+
 .card-wrapper {
   position: relative;
   min-width: var(--card-width);
   min-height: var(--card-height);
   box-sizing: border-box;
+  transform-origin: center;
   transition: transform 0.2s ease;
   cursor: pointer;
 }
@@ -76,51 +84,61 @@ const flipCard = () => {
 }
 
 .card-face.front {
-  transform: rotateY(180deg);
+  transform: rotateY(var(--flip-angle));
 }
 
-/* .card-face.back { */
-/* } */
-
-.card-wrapper.flipped .front {
+.card-face.back {
   transform: rotateY(0deg);
 }
 
-.card-wrapper.flipped .back {
-  transform: rotateY(180deg);
+.card-wrapper.flipped {
+  /* transform: rotateY(0deg) rotate(0deg) scale(var(--scale-factor)); */
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%) scale(var(--scale-factor));
+  z-index: 10;
 }
 
-.card-wrapper:nth-child(1) {
-  transform: translateX(160px) rotate(-7deg);
+.card-wrapper.flipped .front {
+  transform: none;
+  z-index: 10;
+  width: 400px;
+  height: 800px;
+}
+
+.card-wrapper.flipped .back {
+  transform: rotateY(var(--flip-angle));
+}
+
+.card-wrapper:nth-child(1):not(.flipped) {
+  transform: translateX(var(--width-offset)) rotate(calc(-1 * var(--base-rotate-angle)));
   z-index: 3;
 }
 
-.card-wrapper:nth-child(2) {
+.card-wrapper:nth-child(2):not(.flipped) {
   transform: translateX(0);
   z-index: 2;
 }
 
-.card-wrapper:nth-child(3) {
-  transform: translateX(-160px) rotate(7deg);
+.card-wrapper:nth-child(3):not(.flipped) {
+  transform: translateX(calc(-1 * var(--width-offset))) rotate(var(--base-rotate-angle));
   z-index: 1;
 }
 
-.card-wrapper:hover {
+.card-wrapper:not(.flipped):hover {
   transform: scale(1.01);
 }
 
-.card-wrapper:nth-child(1):hover {
-  transform: translateX(150px) rotate(-8deg);
-  /* --degree: 45deg; */
+.card-wrapper:nth-child(1):not(.flipped):hover {
+  transform: translateX(var(--hover-translate)) rotate(calc(-1 * var(--hover-rotate)));
 }
 
-.card-wrapper:nth-child(2):hover {
-  /* --degree: 90deg; */
+.card-wrapper:nth-child(2):not(.flipped):hover {
 }
 
-.card-wrapper:nth-child(3):hover {
-  transform: translateX(-150px) rotate(8deg);
-  /* --degree: 135deg; */
+.card-wrapper:nth-child(3):not(.flipped):hover {
+  transform: translateX(calc(-1 * var(--hover-translate))) rotate(var(--hover-rotate));
 }
 
 .card-wrapper img {
