@@ -6,7 +6,7 @@ export const useCardStore = defineStore('card', () => {
   const REST_PJT_URL_CARDS = `http://localhost:8080/cards`
   const REST_PJT_URL_EXERCISE = `http://localhost:8080/excercise`
 
-  const userCollectedCardData = ref([])
+  const userCollectedCardData = ref([{}, {}, {}])
   const userRecentlyCollectedCardData = ref([])
   const generatedCardStackData = ref([])
 

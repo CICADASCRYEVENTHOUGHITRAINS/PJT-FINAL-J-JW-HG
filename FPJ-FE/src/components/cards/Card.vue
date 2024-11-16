@@ -1,5 +1,5 @@
 <template>
-  <div class="card-container" :class="{ flipped: !isFlipped }" @click="flipCard">
+  <div class="card-wrapper" :class="{ flipped: !isFlipped }" @click="flipCard">
     <div class="card-face back"></div>
     <div class="card-face front">
       <img src="@/assets/test-stretch-icon.png" alt="" />
@@ -23,15 +23,15 @@ const flipCard = () => {
 </script>
 
 <style scoped>
-* {
+.card-wrapper {
+  --card-width: 200px;
+  --card-height: 360px;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Old versions of Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
 
-  --card-width: 200px;
-  --card-height: 360px;
   /* --degree: ; */
   /* --highlight-color: ; */
   /* --base-color: ; */
@@ -52,27 +52,23 @@ const flipCard = () => {
   --level-color-middle: #fff941;
   --level-color-high: #ff5652;
 }
-.card-container {
+.card-wrapper {
   position: relative;
-  width: var(--card-width);
-  height: var(--card-height);
+  min-width: var(--card-width);
+  min-height: var(--card-height);
   box-sizing: border-box;
-  border-radius: 10px;
-
   transition: transform 0.2s ease;
   cursor: pointer;
 }
 
 .card-face {
-  position: absolute;
-  width: var(--card-width);
   height: var(--card-height);
+  width: var(--card-width);
+  padding: 0.5rem;
+  position: absolute;
   background: linear-gradient(135deg, var(--card-color-emerald), var(--card-color-sapphire));
   border: 2px solid var(--card-color-emerald);
-  min-width: 200px;
   border-radius: 10px;
-
-  padding: 1rem;
   backface-visibility: hidden;
   transition:
     transform 0.4s ease,
@@ -86,45 +82,49 @@ const flipCard = () => {
 /* .card-face.back { */
 /* } */
 
-.card-container.flipped .front {
+.card-wrapper.flipped .front {
   transform: rotateY(0deg);
 }
 
-.card-container.flipped .back {
+.card-wrapper.flipped .back {
   transform: rotateY(180deg);
 }
 
-.card-container:nth-child(1) {
-  transform: translate(120px, 0.5rem) rotate(-7deg);
+.card-wrapper:nth-child(1) {
+  transform: translateX(160px) rotate(-7deg);
   z-index: 3;
 }
 
-.card-container:nth-child(2) {
-  transform: rotate(0deg);
+.card-wrapper:nth-child(2) {
+  transform: translateX(0);
   z-index: 2;
 }
 
-.card-container:nth-child(3) {
-  transform: translate(-120px, 0.5rem) rotate(7deg);
+.card-wrapper:nth-child(3) {
+  transform: translateX(-160px) rotate(7deg);
   z-index: 1;
 }
 
-.card-container:nth-child(1):hover {
-  transform: scale(1.02) translate(110px, 10px) rotate(-8deg);
-  --degree: 45deg;
+.card-wrapper:hover {
+  transform: scale(1.01);
 }
 
-.card-container:nth-child(2):hover {
-  transform: scale(1.02) rotate(0deg);
-  --degree: 90deg;
+.card-wrapper:nth-child(1):hover {
+  transform: translateX(150px) rotate(-8deg);
+  /* --degree: 45deg; */
 }
 
-.card-container:nth-child(3):hover {
-  transform: scale(1.02) translate(-110px, 10px) rotate(8deg);
-  --degree: 135deg;
+.card-wrapper:nth-child(2):hover {
+  /* --degree: 90deg; */
 }
-.card-container img {
-  max-width: 200px;
+
+.card-wrapper:nth-child(3):hover {
+  transform: translateX(-150px) rotate(8deg);
+  /* --degree: 135deg; */
+}
+
+.card-wrapper img {
+  max-width: 100%;
   -webkit-user-drag: none;
   -khtml-user-drag: none;
   -moz-user-drag: none;

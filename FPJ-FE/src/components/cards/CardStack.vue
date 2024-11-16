@@ -18,7 +18,9 @@ onBeforeMount(async () => {
 
 <style scoped>
 .card-container {
+  position: relative;
   display: flex;
+  box-sizing: border-box;
   justify-content: center;
   align-items: center;
   gap: 10px;
