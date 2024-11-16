@@ -4,7 +4,6 @@ import axios from 'axios'
 
 export const useCardStore = defineStore('card', () => {
   const REST_PJT_URL_CARDS = `http://localhost:8080/cards`
-
   const userCollectedCardData = ref([])
   const userRecentlyCollectedCardData = ref([])
 
@@ -14,6 +13,7 @@ export const useCardStore = defineStore('card', () => {
    * @returns {Promise<Card[]>}
    * @throws {Error}
    */
+
   const getCardFromCollectedCardData = async (cardId) => {
     try {
       const res = await axios({
