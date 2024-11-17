@@ -16,7 +16,7 @@ import com.ssafit.model.service.ExerciseService;
 
 @RestController
 @RequestMapping("/exercise")
-@CrossOrigin(origins = {"http://localhost:5173/*", "http://localhost:5174/*"}) // TODO origin 허용할 uri 작성
+@CrossOrigin(origins = {"*"}) // TODO origin 허용할 uri 작성
 public class ExerciseController {
 	private final ExerciseService exerciseService;
 	// 생성자로 의존성 주입
@@ -31,7 +31,7 @@ public class ExerciseController {
 	@GetMapping("/random")
 	public ResponseEntity<?> getRandomExercise() {
 		List<Exercise> randomExerciseList = exerciseService.getRandomExercise();
-		
+		System.out.println("test");
 		// 조회에 실패했을 경우
 		if(randomExerciseList == null) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("운동 데이터가 존재하지 않습니다.");

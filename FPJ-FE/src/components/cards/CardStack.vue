@@ -1,5 +1,4 @@
 <template>
-  <RouterLink :to="{ name: 'profile' }">toProfile</RouterLink>
   <div class="card-container">
     <Card v-for="item in store.userCollectedCardData" :key="item.id" :data="item" />
   </div>
