@@ -28,7 +28,6 @@ const currentPage = computed(() => route.meta.title)
 
 <style scoped>
 #webview-header {
-  background-color: rebeccapurple;
   display: flex;
   align-items: center;
   justify-content: space-between;

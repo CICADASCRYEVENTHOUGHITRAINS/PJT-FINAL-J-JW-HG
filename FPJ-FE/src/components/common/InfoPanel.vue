@@ -11,7 +11,6 @@
 
 <style scoped>
 #info-panel {
-  background-color: cyan;
   width: 20vw;
   min-width: 200px;
 }
