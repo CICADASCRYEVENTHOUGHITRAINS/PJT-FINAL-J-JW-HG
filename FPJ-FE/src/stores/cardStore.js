@@ -72,5 +72,6 @@ export const useCardStore = defineStore('card', () => {
     userRecentlyCollectedCardData,
     getUserCollectedCardData,
     getUserRecentlyCollectedCardData,
+    getRandomlySelectedExerciseData,
   }
 })
