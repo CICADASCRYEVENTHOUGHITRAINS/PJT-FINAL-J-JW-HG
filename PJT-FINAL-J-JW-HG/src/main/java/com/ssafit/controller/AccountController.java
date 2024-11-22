@@ -35,8 +35,8 @@ public class AccountController {
 	 * 	(String) loginId,
 	 * 	(String) password
 	 * }
-	 * @return Boolean
-	 * true/false	 
+	 * @return String
+	 * token
 	 */
 	@PostMapping("/login")
 	public ResponseEntity<?> tryLogin(@RequestBody User user) {
