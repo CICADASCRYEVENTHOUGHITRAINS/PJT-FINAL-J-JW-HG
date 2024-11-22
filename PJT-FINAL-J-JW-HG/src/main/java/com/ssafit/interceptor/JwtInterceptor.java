@@ -1,9 +1,14 @@
 package com.ssafit.interceptor;
 
+import java.util.Arrays;
+import java.util.Map;
+
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties.ShowSummaryOutput;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.ssafit.util.JwtUtil;
 
@@ -23,7 +28,7 @@ public class JwtInterceptor implements HandlerInterceptor{
 		this.jwtUtil = jwtUtil;
 	}
 	//-----------------------------------------------------------//
-	// 로직
+	// AOP 로직
 	//-----------------------------------------------------------//
 	/** prehandle: servlet에서 controller로 가기전
 	 */
@@ -43,8 +48,24 @@ public class JwtInterceptor implements HandlerInterceptor{
 			
 			// 토큰 유효성 검사
 			if(jwtUtil.verifyToken(jwt)) {
+				// path variable 추출
+				@SuppressWarnings("unchecked") // Object -> Map cast
+				Map<String, String> pathVariables = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+				
+				// path variable이 있고, userId가 포함되어 있을 때
+				if(pathVariables != null && pathVariables.containsKey("userId")) {
+					// path variable과 token에 있는 userId 추출
+					int pathUserId = Integer.valueOf(pathVariables.get("userId"));
+					int tokenUserId = jwtUtil.getUserId(jwt);
+					
+					// 검증결과 불일치 시
+					if(pathUserId != tokenUserId) {
+						throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사람의 정보에 접근할 수 없습니다.");
+					}
+				}		
 				// controller로 가도 좋다.
 				return true;
+				
 			}
 		}
 		
