@@ -46,12 +46,7 @@ public class ExerciseController {
 		// 정상 로직
 		try {
 			List<Exercise> randomExerciseList = exerciseService.getRandomExercise();
-			
-			// 조회에 실패했을 경우
-			if(randomExerciseList == null) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("운동 데이터가 존재하지 않습니다.");
-			}
-					
+								
 			return new ResponseEntity<List<Exercise>>(randomExerciseList, HttpStatus.OK);			
 		}
 		catch(Exception e) {
@@ -59,6 +54,13 @@ public class ExerciseController {
 			System.out.println("===userController===");
 			e.printStackTrace();
 			System.out.println("===userController===");
+			
+			// 데이터 조회에 실패 시
+			if(e.getMessage().contains("데이터 조회")) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+			}
+			
+			// 다른 모든 예외에 대해
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
 		}
 	}
@@ -78,17 +80,19 @@ public class ExerciseController {
 		try {
 			List<Exercise> allExerciseList = exerciseService.getAllExercise();
 			
-			// 데이터가 없거나 조회에 실패하면 service에서 null 반환
-			if(allExerciseList == null) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("운동 데이터가 존재하지 않습니다.");
-			}
-			
 			return new ResponseEntity<List<Exercise>>(allExerciseList, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			System.out.println("===userController===");
 			e.printStackTrace();
 			System.out.println("===userController===");
+
+			// 데이터 조회에 실패 시
+			if(e.getMessage().contains("데이터 조회")) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+			}
+			
+			// 다른 모든 예외에 대해
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
 		}		
 	}
@@ -108,18 +112,20 @@ public class ExerciseController {
 	public ResponseEntity<?> getExerciseInfo(@PathVariable int exerciseId) {
 		try {
 			Exercise exerciseInfo = exerciseService.getExerciseInfo(exerciseId);
-			
-			// 데이터가 없거나 조회에 실패하면 service에서 null 반환
-			if(exerciseInfo == null) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("운동 데이터가 존재하지 않습니다."); 
-			}
-			
+					
 			return new ResponseEntity<Exercise>(exerciseInfo, HttpStatus.OK);					
 		}
 		catch(Exception e) {
 			System.out.println("===userController===");
 			e.printStackTrace();
 			System.out.println("===userController===");
+			
+			// 데이터 조회에 실패 시
+			if(e.getMessage().contains("데이터 조회")) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+			}
+			
+			// 다른 모든 예외에 대해
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
 		}
 	}
@@ -140,18 +146,20 @@ public class ExerciseController {
 	public ResponseEntity<?> getExerciseByPart(@PathVariable String partName) {
 		try { 
 			List<Exercise> partExerciseList = exerciseService.getExerciseByPart(partName);
-			
-			// 데이터가 없거나 조회에 실패하면 service에서 null 반환
-			if(partExerciseList == null) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("운동 데이터가 존재하지 않습니다.");
-			}
-			
+						
 			return new ResponseEntity<List<Exercise>>(partExerciseList, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			System.out.println("===userController===");
 			e.printStackTrace();
 			System.out.println("===userController===");
+			
+			// 데이터 조회에 실패 시
+			if(e.getMessage().contains("데이터 조회")) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+			}
+			
+			// 다른 모든 예외에 대해
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
 		}
 	}

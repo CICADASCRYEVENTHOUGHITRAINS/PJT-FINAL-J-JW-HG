@@ -2,7 +2,9 @@ package com.ssafit.model.service;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ssafit.model.dao.ExerciseDao;
 import com.ssafit.model.dto.Exercise;
@@ -38,20 +40,12 @@ public class ExerciseServiceImpl implements ExerciseService {
 			
 			// 데이터가 없거나 가져오는 데에 실패했다면
 			if(randomExerciseList == null | randomExerciseList.size() == 0) {
-				System.out.println("Service에서의 통신: List를 불러오는 데 실패했습니다.");
-				return null;
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "데이터 조회에 실패했습니다.");
 			}
 			
 			return randomExerciseList;			
 		}
-		catch(Exception e) {
-			// 기타 예외에 대해서도 null 반환
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			return null;
-		}
+		catch(Exception e) { throw e; }	
 
 	}
 	
@@ -72,20 +66,12 @@ public class ExerciseServiceImpl implements ExerciseService {
 			
 			// 데이터가 없거나 가져오는 데에 실패했다면
 			if(allExerciseList == null | allExerciseList.size() == 0) {
-				System.out.println("Service에서의 통신: List를 불러오는 데 실패했습니다.");
-				return null;
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "데이터 조회에 실패했습니다.");
 			}
 			
 			return allExerciseList;
 		}
-		catch(Exception e) {
-			// 기타 예외에 대해서도 null 반환
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			return null;
-		}
+		catch(Exception e) { throw e; }
 	}
 
 	
@@ -106,20 +92,12 @@ public class ExerciseServiceImpl implements ExerciseService {
 			Exercise exerciseInfo = exerciseDao.getExerciseInfo(exerciseId);
 			
 			if(exerciseInfo == null) {
-				System.out.println("Service에서의 통신: List를 불러오는 데 실패했습니다.");
-				return null;
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "데이터 조회에 실패했습니다.");
 			}
 			
 			return exerciseInfo;
 		}
-		catch(Exception e) {
-			// 기타 예외에 대해서도 null 반환
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			return null;
-		}
+		catch(Exception e) { throw e; }
 	}
 
 	/** 4. 특정 부위에 대한 운동 조회
@@ -140,20 +118,12 @@ public class ExerciseServiceImpl implements ExerciseService {
 			
 			// 데이터가 없거나 가져오는 데에 실패했다면
 			if(partExerciseList == null || partExerciseList.size() == 0) {
-				System.out.println("Service에서의 통신: List를 불러오는 데 실패했습니다.");
-				return null;
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "데이터 조회에 실패했습니다.");
 			}
 			
 			return partExerciseList;
 		}
-		catch(Exception e) {
-			// 기타 예외에 대해서도 null 반환
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			return null;
-		}
+		catch(Exception e) { throw e; }
 	}
 	
 }
