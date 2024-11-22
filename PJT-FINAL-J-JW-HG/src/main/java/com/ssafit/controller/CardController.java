@@ -21,30 +21,30 @@ import com.ssafit.model.service.CardService;
 @RequestMapping("/cards")
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:4173"}) 
 public class CardController {
-	//////////////////////////////////////////////////////////////
+	//-----------------------------------------------------------//
 	// 멤버 필드
-	//////////////////////////////////////////////////////////////
+	//-----------------------------------------------------------//
 	private final CardService cardService;
 
 	// 생성자로 의존성 주입
 	public CardController(CardService cardService) {		
 		this.cardService = cardService;
 	}
-	//////////////////////////////////////////////////////////////
+	//-----------------------------------------------------------//
 	// 로직
-	//////////////////////////////////////////////////////////////
+	//-----------------------------------------------------------//
 	// 1. 카드 수집 -> DB에 카드 등록
 	/**
 	 * @param Card
 	 * {
-	 * 	exerciseId,
-	 * 	score,
-	 * 	tier
+	 * 	(int) exerciseId,
+	 * 	(int) score,
+	 * 	(int) tier 
 	 * }
 	 * @param (int) userId
 	 * @return Map
 	 * {
-	 * 	(int) id
+	 * 	id: (int) id
 	 * } 
 	 */
 	@PostMapping("/{userId}")
@@ -53,11 +53,6 @@ public class CardController {
 		try {
 			card.setUserId(userId);			
 			int isSuccess = cardService.postCard(card);
-			
-			/* 등록에 실패했을 경우 */
-			if(isSuccess == -1) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 유저입니다."); 
-			}
 			
 			/* 등록에 성공했을 경우 */			
 			// mapper에서 <keyProperty="id" useGeneratedKeys="true"> 처리해놨기 때문에 객체에 자동으로 AUTO_INCREMENT 값 반영
@@ -74,6 +69,16 @@ public class CardController {
 			System.out.println("===userController===");
 			e.printStackTrace();
 			System.out.println("===userController===");
+			
+			// exerciseId 값이 비정상적일 경우
+			if(e.getMessage().contains("fk_exercise_id")) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 운동입니다.");
+			}
+			else if(e.getMessage().contains("fk_user_id")) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("다른 사람의 정보에 접근할 수 없습니다.");
+			}
+			
+			// 그 외 모든 예외에 대해서
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
 		}
 		
@@ -99,10 +104,10 @@ public class CardController {
 		try {
 			List<Card> cardList = cardService.getAllCards(userId);
 			
-			// 조회에 실패했을 경우
-			if(cardList == null) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userId + "유저의 카드 데이터가 존재하지 않습니다.");
-			}
+				// 조회에 실패했을 경우
+				if(cardList == null) {
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userId + "유저의 카드 데이터가 존재하지 않습니다.");
+				}
 			
 			// 전체 카드를 조회할 때 user table의 ttoal_card_count와 같은 지 검증, 다르면 실제 카드 리스트 size로 수정
 			
@@ -112,6 +117,12 @@ public class CardController {
 			System.out.println("===userController===");
 			e.printStackTrace();
 			System.out.println("===userController===");
+			
+			if(e.getMessage().contains("다른 사람")) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+			}
+			
+			// 다른 모든 예외에 대해
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
 		}
 
@@ -149,6 +160,15 @@ public class CardController {
 			System.out.println("===userController===");
 			e.printStackTrace();
 			System.out.println("===userController===");
+			
+			if(e.getMessage().contains("다른 사람")) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+			}
+			else if(e.getMessage().contains("1개 이상")) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+			}
+			
+			// 다른 모든 예외에 대해
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
 		}
 	}
@@ -183,6 +203,12 @@ public class CardController {
 			System.out.println("===userController===");
 			e.printStackTrace();
 			System.out.println("===userController===");
+			
+			if(e.getMessage().contains("다른 사람")) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+			}
+			
+			// 다른 모든 예외에 대해
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
 		}
 	}

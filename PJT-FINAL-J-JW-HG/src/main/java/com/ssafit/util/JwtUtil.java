@@ -24,6 +24,9 @@ import io.jsonwebtoken.security.Keys;
  * JWT 발행, 토큰 생성, 토큰 검증 등의 역할을 하는 클래스 
  */
 public class JwtUtil {
+	//-----------------------------------------------------------//
+	// 멤버 필드
+	//-----------------------------------------------------------//
     private final Key secretKey; // signWith에서 사용하기 위한 key 객체
     private static final Long expiration = 1000L * 60 * 60 * 24; // 밀리세컨드 기준 일단 하루
 
@@ -36,13 +39,12 @@ public class JwtUtil {
 		byte[] keyBytes = Decoders.BASE64.decode(secret); // Key 객체로 만들기 위해 byte로 디코딩
 		this.secretKey = Keys.hmacShaKeyFor(keyBytes); // Keys를 통해 Key 객체로 변환
 	}
-
-	//////////////////////////////////////////////////////////////////////
-	// JWT Building
-	//////////////////////////////////////////////////////////////////////	
 	
-	/**
-	 * JWT 생성
+	//-----------------------------------------------------------//
+	// JWT Building
+	//-----------------------------------------------------------//
+	
+	/** JWT 생성
 	 * @param user
 	 * @param expiration
 	 * @return
@@ -70,11 +72,10 @@ public class JwtUtil {
 				.compact();
 	}
 
-	//////////////////////////////////////////////////////////////////////
+	//-----------------------------------------------------------//
 	// Generate Tokens
-	//////////////////////////////////////////////////////////////////////
-	/**
-	 * Access Token 생성
+	//-----------------------------------------------------------//
+	/** Access Token 생성
 	 * @param (User) user
 	 * @return (String) Access Token
 	 */
@@ -82,11 +83,14 @@ public class JwtUtil {
         return createToken(user, expiration);
     }
 
-    
-    
-	//////////////////////////////////////////////////////////////////////
+	//-----------------------------------------------------------//
 	// Verifying Token
-	//////////////////////////////////////////////////////////////////////
+	//-----------------------------------------------------------//
+    /** token 유효성 검사
+     * @param token
+     * @return Boolean
+     * true/false
+     */
     public boolean verifyToken(String token) {
         try {
         	// parsing
@@ -119,11 +123,10 @@ public class JwtUtil {
         // 출처: https://sjh9708.tistory.com/170 [데굴데굴 개발자의 기록:티스토리]
     }
     
-	//////////////////////////////////////////////////////////////////////
+	//-----------------------------------------------------------//
 	// Extract Information
-	//////////////////////////////////////////////////////////////////////
-    /**
-     * Access Token에서 JWT Claims 추출
+	//-----------------------------------------------------------//
+    /** Access Token에서 JWT Claims 추출
      * @param (String) accessToken
      * @return (Claims) JWT Claims
      */
@@ -139,8 +142,7 @@ public class JwtUtil {
         }
     }
     
-    /**
-     * Token에서 User Id 추출
+    /** Token에서 User Id 추출
      * @param (String) token
      * @return (int) userId
      */
@@ -148,6 +150,10 @@ public class JwtUtil {
     	return parseClaims(token).get("userId", Integer.class);
     }
     
+    /** token에서 userName 추출
+     * @param token
+     * @return (String) userName
+     */
     public String getUserName(String token) {
     	return parseClaims(token).get("userName", String.class);
     }

@@ -12,6 +12,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtInterceptor implements HandlerInterceptor{
+	//-----------------------------------------------------------//
+	// 멤버 필드
+	//-----------------------------------------------------------//
 	private final JwtUtil jwtUtil;
 	
 	// 생성자로 의존성 주입
@@ -19,9 +22,10 @@ public class JwtInterceptor implements HandlerInterceptor{
 		super();
 		this.jwtUtil = jwtUtil;
 	}
-	
-	/**
-	 * prehandle: servlet에서 controller로 가기전 
+	//-----------------------------------------------------------//
+	// 로직
+	//-----------------------------------------------------------//
+	/** prehandle: servlet에서 controller로 가기전
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

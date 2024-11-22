@@ -19,17 +19,19 @@ import com.ssafit.model.service.ExerciseService;
 @RequestMapping("/exercise")
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:4173"}) 
 public class ExerciseController {
+	//-----------------------------------------------------------//
+	// 멤버 필드
+	//-----------------------------------------------------------//
 	private final ExerciseService exerciseService;
+	
 	// 생성자로 의존성 주입
 	public ExerciseController(ExerciseService exerciseService) {		
 		this.exerciseService = exerciseService;
-	}
-	
-//////////////////////////////////////////////////////////////
-	// methods //
-	
-	// 1. 임의의 랜덤 운동 조회
-	/** 
+	}	
+	//-----------------------------------------------------------//
+	// 로직	
+	//-----------------------------------------------------------//
+	/** 1. 임의의 랜덤 운동 조회 
 	 * @return List<Exercise>
 	 * [{
 	 * 	(int) id,
@@ -61,10 +63,7 @@ public class ExerciseController {
 		}
 	}
 	
-	
-	/////////////////////////////////////
-	// 2. 운동 정보 전체 조회
-	/**
+	/** 2. 운동 정보 전체 조회
 	 * @return List<Exercise>
 	 * [{
 	 * 	(int) id,
@@ -94,8 +93,7 @@ public class ExerciseController {
 		}		
 	}
 	
-	// 3. 특정 운동 정보 조회
-	/**
+	/** 3. 특정 운동 정보 조회
 	 * @param (int) exerciseId
 	 * @return Exercise
 	 * {
@@ -127,9 +125,7 @@ public class ExerciseController {
 	}
 	
 	
-	///////////////////////////////////
-	// 4. 특정 부위에 대한 운동 조회
-	/**
+	/** 4. 특정 부위에 대한 운동 조회
 	 * @param (String) partName: LIKE 참조라 "손" 만 검색해도 "손목", "손바닥" 등이 결과로 출력됨.
 	 * @return List<Exercise>
 	 * [{

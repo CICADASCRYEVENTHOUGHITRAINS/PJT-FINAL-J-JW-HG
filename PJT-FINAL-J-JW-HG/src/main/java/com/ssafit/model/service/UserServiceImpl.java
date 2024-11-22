@@ -1,9 +1,10 @@
 package com.ssafit.model.service;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ssafit.model.dao.UserDao;
 import com.ssafit.model.dto.User;
@@ -11,6 +12,9 @@ import com.ssafit.util.JwtUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
+	//-----------------------------------------------------------//
+	// 멤버 필드
+	//-----------------------------------------------------------//
 	private final UserDao userDao;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final JwtUtil jwtUtil;
@@ -22,20 +26,20 @@ public class UserServiceImpl implements UserService {
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.jwtUtil = jwtUtil;
 	}
-
-///////////////////////////////////////////////////////////////////////////////
-	// Business Logic 
-///////////////////////////////////////////////////////////////////////////////	
-	// 1. 특정 유저 정보 전체 조회
-	/* return:
-	{ 
-	 	id,
-	 	loginId,
-		userName,
-		score,
-		totalCardCount,
-		tier
-	}
+	//-----------------------------------------------------------//
+	// 로직 - UserController
+	//-----------------------------------------------------------//	
+	/** 1. 특정 유저 정보 전체 조회
+	 * @param (int) userId
+	 * @return: User
+	 * {
+	 * (int) id,
+	 * (String) loginId,
+	 * (String) userName,
+	 * (int) score,
+	 * (int) totalCardCount,
+	 * (int) tier
+	 * }
 	 */
 	@Override
 	public User getUserInfo(int userId) {
@@ -49,33 +53,23 @@ public class UserServiceImpl implements UserService {
 			// 조회에 실패하면 null이 반환됨
 			// mapper의 resultType이 Object 이기 때문에 존재하지 않는 유저라도 null 반환할수도 있음.
 			if(userInfo == null) {
-				System.out.println("Service에서 통신: " + userId + "번 유저정보를 찾을 수 없습니다.");
-				return null;
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, userId + " 유저를 찾을 수 없습니다.");
 			}
 			
-			// token에 있는 id로 조회할 경우에는 없어도 갠춘한 로직일지도? token 탈취를 고려한다면 refresh 토큰 검증 필요
 			// 본인이 아닌 다른 사람의 정보를 조회할 경우
 			if(userInfo.getId() != userId) {
-				System.out.println("다른 사람의 정보를 조회하려 합니다.");
-				return null;
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사람의 정보를 조회하려 합니다.");					
 			}		
 			
 			return userInfo;
 		}
-		catch(Exception e) {
-			// 기타 예외에 대해서도 null 반환
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			return null;
-		}
+		catch(Exception e) { throw e; }
 	}
 
 
-	// 2. 유저의 건강력 조회
-	/* return:
-	 (int) score
+	/** 2. 유저의 건강력 조회
+	 * @param (int) userId
+	 * @return: int
 	 */
 	@Override
 	public int getUserScore(int userId) {
@@ -85,20 +79,13 @@ public class UserServiceImpl implements UserService {
 			
 			return userScore; 
 		}
-		catch(Exception e) {
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			// -1 반환
-			return -1;
-		}
+		catch(Exception e) { throw e; }
 	}
 
 	
-	// 3. 유저가 건강 관리한 연속 일수
-	/* return:
-	 (int) streak
+	/** 3. 유저가 건강 관리한 연속 일수
+	 * @param (int) userId
+	 * @return: int
 	 */
 	@Override
 	public int getUserStreak(int userId) {
@@ -107,19 +94,13 @@ public class UserServiceImpl implements UserService {
 			
 			return userStreak;
 		}
-		catch(Exception e) {
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			return -1;
-		}				
+		catch(Exception e) { throw e; }			
 	}
 
 	
-	// 4. 유저의 등급 조회
-	/* return:
-	 (int) tier
+	/** 4. 유저의 등급 조회 
+	 * @param (int) userId
+	 * @return: int
 	 */
 	@Override
 	public int getUserTier(int userId) {
@@ -129,18 +110,12 @@ public class UserServiceImpl implements UserService {
 			
 			return userTier;
 		}
-		catch(Exception e) {
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			return -1;
-		}		
+		catch(Exception e) { throw e; }	
 	}
 		
-	// 5. 유저가 획득한 총 카드 수 조회
-	/* return:
-	 (int) totalCardCount
+	/** 5. 유저가 획득한 총 카드 수 조회
+	 * @param (int) userId
+	 * @return: int
 	 */
 	@Override
 	public int getUserTotalCardCount(int userId) {
@@ -150,16 +125,14 @@ public class UserServiceImpl implements UserService {
 			
 			return userTotalCardCount;					
 		}
-		catch(Exception e) {
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			return -1;
-		}		
+		catch(Exception e) { throw e; }	
 	}
 
-	// 6. 유저가 획득한 총 카드 수 업데이트
+	/** 6. 유저가 획득한 총 카드 수 업데이트
+	 * @param (int) userId
+	 * @param (int) newTotalCardCount
+	 * @return: int (0/1)
+	 */
 	@Override
 	public int updateUserTotalCardCount(int userId, int newTotalCardCount) {
 		try {
@@ -167,22 +140,19 @@ public class UserServiceImpl implements UserService {
 			
 			// update가 성공한 column 개수를 반환 -> 정상 로직 동작시 1, 비정상시 0 반환
 			if(isTotalCardCountUpdated == 0) {
-				System.out.println("Service에서의 통신: 해당 유저를 찾을 수 없습니다.");
-				return -1;
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사람의 정보에 접근하려 합니다.");
 			}
 			
 			return isTotalCardCountUpdated;
 		}
-		catch(Exception e) {
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			return -1;
-		}		
+		catch(Exception e) { throw e; }
 	}
 
-	// 7. 건강 점수 업데이트
+	/** 7. 건강 점수 업데이트
+	 * @param (int) userId
+	 * @param (int) newUserScore
+	 * @return: int (0/1)
+	 */
 	@Override
 	public int updateUserScore(int userId, int newUserScore) {
 		try {
@@ -190,23 +160,23 @@ public class UserServiceImpl implements UserService {
 			
 			// update가 성공한 column 개수를 반환 -> 정상 로직 동작시 1, 비정상시 0 반환
 			if(isScoreUpdated == 0) {
-				System.out.println("Service에서의 통신: 해당 유저를 찾을 수 없습니다.");
-				return -1;
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사람의 정보에 접근하려 합니다.");
 			}
 			
 			return isScoreUpdated;
 		}
-		catch(Exception e) {
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			return -1;			
-		}		
+		catch(Exception e) { throw e; }
 	}
 	
-	// ========================= Account ================================= //
+	//-----------------------------------------------------------//
+	// 로직 - AccountController
+	//-----------------------------------------------------------//
 	// 8. 로그인 시도에 따른 특정 유저의 비밀번호 조회
+	/**
+	 * @param (String) loginId	 
+	 * @param (String) password
+	 * @return (String) token
+	 */
 	@Override
 	public String getInfoForLoginTry(String loginId, String password) {
 		try {
@@ -216,15 +186,14 @@ public class UserServiceImpl implements UserService {
 			
 			// 해당하는 유저가 없을 시
 			if(dbUser == null) {
-				throw new UsernameNotFoundException("Service에서의 통신: 해당 유저를 찾을 수 없습니다.");				
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, loginId + " 아이디를 찾을 수 없습니다.");				
 			}
 			
 			String dbPassword = dbUser.getPassword();			
 				
 			// 비밀번호가 일치하지 않는다면
 			if(!bCryptPasswordEncoder.matches(password, dbPassword)) {
-				System.out.println("Service에서의 통신: 비밀번호가 일치하지 않습니다.");
-				return null;
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
 			}
 			
 			// password 뺴고 등록
@@ -232,34 +201,30 @@ public class UserServiceImpl implements UserService {
 			
 			return accessToken;
 		}
-		catch(Exception e) {
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			System.out.println("===userServiceImpl===");
-			
-			return null;	
-		}
+		catch(Exception e) { throw e; }
 	}
 
-	
-	// 9. 회원가입 시도
+	/** 9. 회원가입 시도
+	 * @param user
+	 * @return: int (0/1)
+	 */
 	@Transactional
 	@Override
 	public int tryRegister(User user) {
 		try {
+			user.setLoginId(user.getLoginId().trim());
+			user.setUserName(user.getUserName().trim());
+			
 			// service에서 비즈니스 로직 처리
 			// front에서도 공백 체크 해주겠지만... back에서도 한 번 더 체크
-			if(user.getLoginId() == "") {
-				System.out.println("user의 loginId가 존재하지 않습니다.");
-				return -1;
+			if(user.getLoginId().equals("")) {				
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST , "아이디를 입력해주세요.");
 			}
-			else if(user.getPassword() == "") {
-				System.out.println("user의 password가 존재하지 않습니다.");
-				return -1;
+			else if(user.getPassword().trim().equals("")) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST , "비밀번호를 입력해주세요.");
 			}
-			else if(user.getUserName() == "") {
-				System.out.println("user의 userName이 존재하지 않습니다.");
-				return -1;
+			else if(user.getUserName().equals("")) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST , "닉네임을 입력해주세요.");
 			}
 			
 			// - 비밀번호 암호화
@@ -273,28 +238,12 @@ public class UserServiceImpl implements UserService {
 			
 			// 등록 실패 시
 			if(isUserRegisted == 0) {
-				System.out.println("Service에서의 통신: 유저 등록에 실패했습니다.");
-				return -1;
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR , "유저 등록에 실패했습니다.");
 			}
 			
 			return isUserRegisted;
 		}
-		catch(Exception e) {
-			System.out.println("===userServiceImpl===");
-			e.printStackTrace();
-			// TODO 4 사용자 Exception 설정으로 예외 다각화 처리
-			// 1. 아이디 중복 예외
-			if(e.getMessage().contains("Duplicate")) {
-				// 아이디만 unique임
-				System.out.println("이미 사용중인 아이디입니다.");
-			}
-			
-			// 2. 정보 없음 예외(cannot be null)
-			
-			System.out.println("===userServiceImpl===");
-			
-			return -1;				
-		}
+		catch(Exception e) { throw e; }	
 	}
 }
  

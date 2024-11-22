@@ -9,14 +9,28 @@ import com.ssafit.model.dto.Exercise;
 
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
+	//-----------------------------------------------------------//
+	// 멤버 필드
+	//-----------------------------------------------------------//
 	private final ExerciseDao exerciseDao;
+	
 	// 생성자로 의존성 주입
 	public ExerciseServiceImpl(ExerciseDao exerciseDao) {
 		this.exerciseDao = exerciseDao;
-	}
-	
-	//////////////////////////////////////////////////////////////
-	// 1. 임의의 랜덤 운동 조회
+	}	
+	//-----------------------------------------------------------//
+	// 로직
+	//-----------------------------------------------------------//
+	/** 1. 임의의 랜덤 운동 조회
+	 * @return:List<Exercise> 
+	 * [{
+	 * (int) id,
+	 * (String) part,
+	 * (String) name,
+	 * (String) info,
+	 * (String) time
+	 * }]
+	 */
 	@Override
 	public List<Exercise> getRandomExercise() {
 		try {
@@ -41,8 +55,16 @@ public class ExerciseServiceImpl implements ExerciseService {
 
 	}
 	
-	/////////////////////////////////////
-	// 2. 운동 정보 전체 조회
+	/** 2. 운동 정보 전체 조회
+	 * @return:List<Exercise> 
+	 * [{
+	 * (int) id,
+	 * (String) part,
+	 * (String) name,
+	 * (String) info,
+	 * (String) time
+	 * }]
+	 */
 	@Override
 	public List<Exercise> getAllExercise() {
 		try {
@@ -67,7 +89,17 @@ public class ExerciseServiceImpl implements ExerciseService {
 	}
 
 	
-	// 3. 특정 운동 정보 조회
+	/** 3. 특정 운동 정보 조회
+	 * @param exerciseId
+	 * @return:List<Exercise> 
+	 * [{
+	 * (int) id,
+	 * (String) part,
+	 * (String) name,
+	 * (String) info,
+	 * (String) time
+	 * }]
+	 */
 	@Override
 	public Exercise getExerciseInfo(int exerciseId) {
 		try {
@@ -90,7 +122,17 @@ public class ExerciseServiceImpl implements ExerciseService {
 		}
 	}
 
-	// 4. 특정 부위에 대한 운동 조회
+	/** 4. 특정 부위에 대한 운동 조회
+	 * @param partName
+	 * @return:List<Exercise> 
+	 * [{
+	 * (int) id,
+	 * (String) part,
+	 * (String) name,
+	 * (String) info,
+	 * (String) time
+	 * }]
+	 */
 	@Override
 	public List<Exercise> getExerciseByPart(String partName) {
 		try {
