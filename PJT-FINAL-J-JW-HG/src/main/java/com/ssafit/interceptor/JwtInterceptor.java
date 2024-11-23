@@ -58,11 +58,17 @@ public class JwtInterceptor implements HandlerInterceptor{
 					int pathUserId = Integer.valueOf(pathVariables.get("userId"));
 					int tokenUserId = jwtUtil.getUserId(jwt);
 					
+					System.out.println("=== interceptor ===");
+					System.out.println(pathUserId);
+					System.out.println(tokenUserId);
+					System.out.println("=== interceptor ===");
+										
 					// 검증결과 불일치 시
 					if(pathUserId != tokenUserId) {
 						throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사람의 정보에 접근할 수 없습니다.");
 					}
 				}		
+				
 				// controller로 가도 좋다.
 				return true;
 				

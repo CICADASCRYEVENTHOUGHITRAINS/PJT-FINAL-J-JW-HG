@@ -70,7 +70,7 @@ public class CardServiceImpl implements CardService {
 			
 			// 데이터가 없거나 가져오는 데에 실패했다면
 			if(cardList == null | cardList.size() == 0) {
-				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사람의 정보에 접근할 수 없습니다.");
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "저장된 카드가 없습니다!");
 			}
 			
 			return cardList;	
@@ -102,7 +102,7 @@ public class CardServiceImpl implements CardService {
 
 			// 데이터가 없거나 가져오는 데에 실패했다면
 			if(cardRecentList == null | cardRecentList.size() == 0) {				
-				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사람의 정보에 접근할 수 없습니다.");
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "저장된 카드가 없습니다!");
 			}
 			
 			return cardRecentList;			
@@ -130,7 +130,7 @@ public class CardServiceImpl implements CardService {
 			
 			// 데이터가 없거나 가져오는 데에 실패했다면
 			if(cardInfo == null) {
-				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사람의 정보에 접근할 수 없습니다.");
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "저장된 카드가 없습니다!");
 			}
 			
 			return cardInfo;			

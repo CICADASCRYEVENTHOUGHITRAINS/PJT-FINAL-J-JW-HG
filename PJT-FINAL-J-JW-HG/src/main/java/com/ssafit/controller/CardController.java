@@ -74,6 +74,7 @@ public class CardController {
 			if(e.getMessage().contains("fk_exercise_id")) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 운동입니다.");
 			}
+			
 			else if(e.getMessage().contains("fk_user_id")) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("다른 사람의 정보에 접근할 수 없습니다.");
 			}
@@ -104,10 +105,10 @@ public class CardController {
 		try {
 			List<Card> cardList = cardService.getAllCards(userId);
 			
-				// 조회에 실패했을 경우
-				if(cardList == null) {
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userId + "유저의 카드 데이터가 존재하지 않습니다.");
-				}
+			// 조회에 실패했을 경우
+			if(cardList == null) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userId + "유저의 카드 데이터가 존재하지 않습니다.");
+			}
 			
 			// 전체 카드를 조회할 때 user table의 ttoal_card_count와 같은 지 검증, 다르면 실제 카드 리스트 size로 수정
 			

@@ -2,6 +2,7 @@ package com.ssafit.model.service;
 
 import java.util.List;
 
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,14 +16,48 @@ public class ExerciseServiceImpl implements ExerciseService {
 	// 멤버 필드
 	//-----------------------------------------------------------//
 	private final ExerciseDao exerciseDao;
+	private OpenAiChatModel openAiChatModel;
 	
 	// 생성자로 의존성 주입
-	public ExerciseServiceImpl(ExerciseDao exerciseDao) {
+	public ExerciseServiceImpl(ExerciseDao exerciseDao, OpenAiChatModel openAiChatModel) {
 		this.exerciseDao = exerciseDao;
+		this.openAiChatModel = openAiChatModel;
 	}	
 	//-----------------------------------------------------------//
 	// 로직
 	//-----------------------------------------------------------//
+	
+	// test
+	public String getResponse() {
+		try {
+			String prompt = 
+					"""
+					<요청>
+					당신은 운동 및 건강에 관한 전문가입니다. 하루 종일 컴퓨터 앞에 앉아있는 직장인들을 위해 추천할 수 있는
+					아주 간단한 스트레칭 및 운동 3개를 추천해주세요. 각 스트레칭 및 운동에 대한 답변은 다음과 같은 양식으로 부탁드립니다.
+					
+					<양식>
+					{
+						'part': '손목',
+						'name': '손목 스트레칭',
+						'info': '손바닥을 위로 향하게 하고 반대손으로 손가락을 아래로 당기기',
+						'time': '10'
+					}				
+					""";
+			
+			String response = openAiChatModel.call(prompt);
+			
+			return response;
+		}
+		catch(Exception e) {
+	           // 에러 발생 시 로깅 및 예외 처리
+            e.printStackTrace();
+            throw new RuntimeException("Failed to generate response");
+		}
+	}
+	
+	
+	
 	/** 1. 임의의 랜덤 운동 조회
 	 * @return:List<Exercise> 
 	 * [{
