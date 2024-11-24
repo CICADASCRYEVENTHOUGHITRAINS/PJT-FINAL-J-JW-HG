@@ -43,7 +43,7 @@ public class CardServiceImpl implements CardService {
 			
 			// 데이터가 없거나 가져오는 데에 실패했다면
 			if(isCardPosted == 0) {
-				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사람의 정보에 접근할 수 없습니다.");
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "카드 등록에 실패했습니다.");
 			}
 			 			
 			return isCardPosted;

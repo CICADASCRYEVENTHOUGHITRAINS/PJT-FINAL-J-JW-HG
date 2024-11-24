@@ -2,36 +2,93 @@ package com.ssafit.controller;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ssafit.model.dto.Exercise;
 import com.ssafit.model.service.ExerciseService;
 
 @RestController
-@RequestMapping("/exercise")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:4173"}) 
-public class ExerciseController {
+@RequestMapping("/exercises")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174"}) 
+public class ExercisesController {
 	//-----------------------------------------------------------//
 	// 멤버 필드
 	//-----------------------------------------------------------//
 	private final ExerciseService exerciseService;
 	
 	// 생성자로 의존성 주입
-	public ExerciseController(ExerciseService exerciseService) {		
+	public ExercisesController(ExerciseService exerciseService) {		
 		this.exerciseService = exerciseService;
 	}	
 	//-----------------------------------------------------------//
 	// 로직	
 	//-----------------------------------------------------------//
-	/** 1. 임의의 랜덤 운동 조회 
+	/** 0. gpt로 임의 운동 생성
+	 * @param (int) userId
+	 * @return List<Exercise>
+	 * [{
+	 * 	(int) id,
+	 * 	(String) part,
+	 * 	(String) name,
+	 * 	(String) info,
+	 * 	(String) time
+	 * }] 
+	 */
+	@GetMapping("/ai")
+	public ResponseEntity<?> getGptsExercises() {
+		try {			
+			List<Exercise> exerciseList = exerciseService.getResponse();
+			
+			System.out.println(exerciseList);
+			
+			return new ResponseEntity<List<Exercise>>(exerciseList, HttpStatus.OK);
+		} 
+		catch(Exception e) {
+			System.out.println("===userController===");
+			e.printStackTrace();
+			System.out.println("===userController===");
+			
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
+		}
+	}
+	
+	@PostMapping("/ai")
+	public ResponseEntity<?> postExercise(@RequestBody Exercise exercise) {
+		try {			
+			if(exercise.getInfo() == null || exercise.getName() == null 
+					|| exercise.getPart() == null) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "운동 정보가 제대로 들어오지 않았습니다. 요청을 확인해주세요.");
+			}
+			
+			int isExercisePosted = exerciseService.postExercise(exercise);
+			
+			if(isExercisePosted == 0) {
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "운동 정보 등록에 실패했습니다.");
+			}
+			
+			return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);		
+		}
+		catch(Exception e) {
+			System.out.println("===userController===");
+			e.printStackTrace();
+			System.out.println("===userController===");
+			
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");			
+		}
+	}
+	
+	
+	/** x. 임의의 랜덤 운동 조회 
 	 * @return List<Exercise>
 	 * [{
 	 * 	(int) id,
@@ -142,8 +199,8 @@ public class ExerciseController {
 	 * 	(String) time
 	 * }]
 	 */
-	@GetMapping("/part/{partName}")
-	public ResponseEntity<?> getExerciseByPart(@PathVariable String partName) {
+	@GetMapping("?part={partName}")
+	public ResponseEntity<?> getExerciseByPart(@RequestParam String partName) {
 		try { 
 			List<Exercise> partExerciseList = exerciseService.getExerciseByPart(partName);
 						

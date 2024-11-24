@@ -15,16 +15,16 @@ import com.ssafit.model.dto.User;
 import com.ssafit.model.service.UserService;
 
 @RestController
-@RequestMapping("/user")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:4173"})
-public class UserController {
+@RequestMapping("/users")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174"})
+public class UsersController {
 	//-----------------------------------------------------------//
 	// 멤버 필드
 	//-----------------------------------------------------------//
 	private final UserService userService;
 	
 	// 생성자로 의존성 주입
-	public UserController(UserService userService) {
+	public UsersController(UserService userService) {
 		this.userService = userService;
 	}
 	//-----------------------------------------------------------//

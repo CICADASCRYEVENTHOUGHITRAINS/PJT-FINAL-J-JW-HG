@@ -1,5 +1,6 @@
 package com.ssafit.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -9,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.ssafit.model.dao.ExerciseDao;
 import com.ssafit.model.dto.Exercise;
+import com.ssafit.util.StringParseUtil;
 
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
@@ -18,36 +20,67 @@ public class ExerciseServiceImpl implements ExerciseService {
 	private final ExerciseDao exerciseDao;
 	private OpenAiChatModel openAiChatModel;
 	
+	private final StringParseUtil stringParseUtil;
+	
 	// 생성자로 의존성 주입
-	public ExerciseServiceImpl(ExerciseDao exerciseDao, OpenAiChatModel openAiChatModel) {
+	public ExerciseServiceImpl(ExerciseDao exerciseDao, OpenAiChatModel openAiChatModel, StringParseUtil stringParseUtil) {
 		this.exerciseDao = exerciseDao;
 		this.openAiChatModel = openAiChatModel;
+		this.stringParseUtil = stringParseUtil;
 	}	
 	//-----------------------------------------------------------//
 	// 로직
 	//-----------------------------------------------------------//
 	
-	// test
-	public String getResponse() {
+	@Override
+	public List<Exercise> getResponse() {
 		try {
 			String prompt = 
 					"""
 					<요청>
 					당신은 운동 및 건강에 관한 전문가입니다. 하루 종일 컴퓨터 앞에 앉아있는 직장인들을 위해 추천할 수 있는
 					아주 간단한 스트레칭 및 운동 3개를 추천해주세요. 각 스트레칭 및 운동에 대한 답변은 다음과 같은 양식으로 부탁드립니다.
+					양식의 각 부분에 대한 상세 설명은 소괄호를 통해 알려드리겠습니다.
 					
 					<양식>
 					{
-						'part': '손목',
-						'name': '손목 스트레칭',
-						'info': '손바닥을 위로 향하게 하고 반대손으로 손가락을 아래로 당기기',
-						'time': '10'
+						'part': '손목', (운동 부위)
+						'name': '손목 스트레칭', (운동 이름)
+						'info': '손바닥을 위로 향하게 하고 반대손으로 손가락을 아래로 당기기', (운동 내용)
+						'time': '10' (운동 지속 시간, **반드시 예시와 같은 정수형으로**)
 					}				
 					""";
 			
-			String response = openAiChatModel.call(prompt);
+			//TODO 1. gpt api quota 확인
+//			String response = openAiChatModel.call(prompt);
 			
-			return response;
+			String test =
+				"""
+				[
+					{
+					    "part": "손목",
+					    "name": "손목 스트레칭",
+					    "info": "손바닥를 위로 향하게 하고 반대손으로 손가락을 아래로 당기기",
+					    "time": "10"
+					},
+					{
+					    "part": "목",
+					    "name": "목 스트레칭",
+					    "info": "머리를 전천하 좌우로 기울여 목의 측면을 늘리기",
+					    "time": "20"
+					},
+					{
+					    "part": "어깨",
+					    "name": "어깨 롤링",
+					    "info": "어깨를 천천히 앞뒤로 5회, 위옆으로 5회 돌리기",
+					    "time": "20"
+					}
+				]
+				""";
+			
+			List<Exercise> responseList = stringParseUtil.parseExerciseCards(test);			
+			
+			return responseList;
 		}
 		catch(Exception e) {
 	           // 에러 발생 시 로깅 및 예외 처리
@@ -56,6 +89,21 @@ public class ExerciseServiceImpl implements ExerciseService {
 		}
 	}
 	
+	
+	// 생성한 운동 중 선택한 운동 등록
+	@Override
+	public int postExercise(Exercise exercise) {
+		try {
+			int isExercisePosted = exerciseDao.postExercise(exercise);
+			
+			if(isExercisePosted == 0) {
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "운동 등록에 실패했습니다.");
+			}
+			
+			return isExercisePosted;
+		}		
+		catch(Exception e) { throw e; }
+	}
 	
 	
 	/** 1. 임의의 랜덤 운동 조회
@@ -160,5 +208,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 		}
 		catch(Exception e) { throw e; }
 	}
+	
+	
 	
 }

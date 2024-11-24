@@ -12,22 +12,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafit.model.dto.Card;
 import com.ssafit.model.service.CardService;
 
 @RestController
-@RequestMapping("/cards")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:4173"}) 
-public class CardController {
+@RequestMapping("users/{userId}/cards")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174"}) 
+public class CardsController {
 	//-----------------------------------------------------------//
 	// 멤버 필드
 	//-----------------------------------------------------------//
 	private final CardService cardService;
 
 	// 생성자로 의존성 주입
-	public CardController(CardService cardService) {		
+	public CardsController(CardService cardService) {		
 		this.cardService = cardService;
 	}
 	//-----------------------------------------------------------//
@@ -47,7 +48,7 @@ public class CardController {
 	 * 	id: (int) id
 	 * } 
 	 */
-	@PostMapping("/{userId}")
+	@PostMapping("")
 	// 와일드 카드 사용으로 String과 Map 둘 다 처리할 수 있게	
 	public ResponseEntity<?> postCard(@RequestBody Card card, @PathVariable int userId) {
 		try {
@@ -100,7 +101,7 @@ public class CardController {
 	 * (String) collected_date 
 	 * }]
 	 */
-	@GetMapping("/{userId}")
+	@GetMapping("")
 	public ResponseEntity<?> getAllCards(@PathVariable int userId) {
 		try {
 			List<Card> cardList = cardService.getAllCards(userId);
@@ -143,8 +144,8 @@ public class CardController {
 	 * (String) collected_date 
 	 * }]
 	 */
-	@GetMapping("/{userId}/recent/{cardNumber}")
-	public ResponseEntity<?> getRecentCards(@PathVariable int userId, @PathVariable int cardNumber) {
+	@GetMapping("/recent?limit={cardNumber}")
+	public ResponseEntity<?> getRecentCards(@PathVariable int userId, @RequestParam int cardNumber) {
 		try {
 			List<Card> cardList = cardService.getRecentCards(userId, cardNumber);
 			
@@ -188,7 +189,7 @@ public class CardController {
 	 * (String) collectedDate 
 	 * }
 	 */
-	@GetMapping("/{userId}/{cardId}")
+	@GetMapping("/{cardId}")
 	public ResponseEntity<?> getCardInfo(@PathVariable int userId, @PathVariable int cardId) {
 		try {
 			Card cardInfo = cardService.getCardInfo(userId, cardId);

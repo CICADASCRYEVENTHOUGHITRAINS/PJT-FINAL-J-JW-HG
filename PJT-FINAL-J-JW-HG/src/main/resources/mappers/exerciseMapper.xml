@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafit.model.dao.ExerciseDao">
+	<!-- 0. post exercise gpt에서 생성한 운동 중 선택한 운동 등록 -->
+	<insert id="postExercise" parameterType="Exercise" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO exercise
+		(part, name, info, time)
+		VALUES
+		(#{part}, #{name}, #{info}, #{time})
+	</insert>
+
 	<!-- 1. get random exercise 카드 생성을 위해 랜덤한 운동 3개 조회 -->
 	<select id="getRandomExercise" parameterType="int" resultType="Exercise">
 		SELECT id, part, name, info, time

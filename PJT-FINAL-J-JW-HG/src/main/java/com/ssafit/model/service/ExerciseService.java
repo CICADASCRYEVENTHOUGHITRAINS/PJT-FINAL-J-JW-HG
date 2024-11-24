@@ -8,6 +8,12 @@ public interface ExerciseService {
 	//-----------------------------------------------------------//
 	// 로직
 	//-----------------------------------------------------------//
+	// 0. gpt에서 임의 운동 생성
+	List<Exercise> getResponse();
+	
+	// 생성한 운동 중 선택한 운동 등록
+	int postExercise(Exercise exercise);	
+	
 	/** 1. 임의의 랜덤 운동 조회
 	 * @return:List<Exercise> 
 	 * [{
