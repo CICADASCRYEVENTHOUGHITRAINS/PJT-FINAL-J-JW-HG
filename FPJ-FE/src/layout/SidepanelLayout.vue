@@ -21,6 +21,5 @@ import SidepanelNav from '@/components/common/SidepanelNav.vue'
   align-items: center;
   justify-content: center;
   background-image: linear-gradient(135deg, #d4d4d4 0%, #e2c8c3 100%);
-  flex-direction: row;
 }
 </style>

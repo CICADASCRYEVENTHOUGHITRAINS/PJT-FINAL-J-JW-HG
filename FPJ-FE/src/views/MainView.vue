@@ -13,7 +13,6 @@
 import CardBase from '@/components/cards/CardBase.vue'
 import FlipCard from '@/components/cards/FlipCard.vue'
 import { useCardService } from '@/composables/data/useCardService'
-import SidepanelLayout from '@/layout/SidepanelLayout.vue'
 import { useExerciseStore } from '@/stores/exerciseStore'
 import { ref, onMounted } from 'vue'
 

@@ -17,7 +17,6 @@ import com.ssafit.model.service.UserService;
 @RequestMapping("/auth")
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174"}) 
 public class AuthController {
-	//-----------------------------------------------------------//
 	// 멤버 필드
 	//-----------------------------------------------------------//
 	private final UserService userService;
