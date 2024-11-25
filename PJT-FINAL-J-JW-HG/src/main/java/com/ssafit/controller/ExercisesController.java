@@ -33,7 +33,7 @@ public class ExercisesController {
 	//-----------------------------------------------------------//
 	// 로직	
 	//-----------------------------------------------------------//
-	/** 0. gpt로 임의 운동 생성
+	/** 0. gen AI로 임의 운동 생성
 	 * @param (int) userId
 	 * @return List<Exercise>
 	 * [{
@@ -44,7 +44,7 @@ public class ExercisesController {
 	 * 	(String) time
 	 * }] 
 	 */
-	@GetMapping("/ai")
+	@GetMapping("/random")
 	public ResponseEntity<?> getGptsExercises() {
 		try {			
 			List<Exercise> exerciseList = exerciseService.getResponse();
@@ -62,7 +62,12 @@ public class ExercisesController {
 		}
 	}
 	
-	@PostMapping("/ai")
+	/** 1. 유저가 선택한 운동 등록
+	 * @param exercise
+	 * @return Boolean
+	 * true/false
+	 */
+	@PostMapping("")
 	public ResponseEntity<?> postExercise(@RequestBody Exercise exercise) {
 		try {			
 			if(exercise.getInfo() == null || exercise.getName() == null 
@@ -88,39 +93,39 @@ public class ExercisesController {
 	}
 	
 	
-	/** x. 임의의 랜덤 운동 조회 
-	 * @return List<Exercise>
-	 * [{
-	 * 	(int) id,
-	 * 	(String) part,
-	 * 	(String) name,
-	 * 	(String) info,
-	 * 	(String) time
-	 * }] 
-	 */
-	@GetMapping("/random")
-	public ResponseEntity<?> getRandomExercise() {
-		// 정상 로직
-		try {
-			List<Exercise> randomExerciseList = exerciseService.getRandomExercise();
-								
-			return new ResponseEntity<List<Exercise>>(randomExerciseList, HttpStatus.OK);			
-		}
-		catch(Exception e) {
-			// 예외 처리
-			System.out.println("===userController===");
-			e.printStackTrace();
-			System.out.println("===userController===");
-			
-			// 데이터 조회에 실패 시
-			if(e.getMessage().contains("데이터 조회")) {
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-			}
-			
-			// 다른 모든 예외에 대해
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
-		}
-	}
+//	/** x. 임의의 랜덤 운동 조회 
+//	 * @return List<Exercise>
+//	 * [{
+//	 * 	(int) id,
+//	 * 	(String) part,
+//	 * 	(String) name,
+//	 * 	(String) info,
+//	 * 	(String) time
+//	 * }] 
+//	 */
+//	@GetMapping("/random")
+//	public ResponseEntity<?> getRandomExercise() {
+//		// 정상 로직
+//		try {
+//			List<Exercise> randomExerciseList = exerciseService.getRandomExercise();
+//								
+//			return new ResponseEntity<List<Exercise>>(randomExerciseList, HttpStatus.OK);			
+//		}
+//		catch(Exception e) {
+//			// 예외 처리
+//			System.out.println("===userController===");
+//			e.printStackTrace();
+//			System.out.println("===userController===");
+//			
+//			// 데이터 조회에 실패 시
+//			if(e.getMessage().contains("데이터 조회")) {
+//				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+//			}
+//			
+//			// 다른 모든 예외에 대해
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
+//		}
+//	}
 	
 	/** 2. 운동 정보 전체 조회
 	 * @return List<Exercise>
