@@ -58,6 +58,10 @@ public class ExercisesController {
 			e.printStackTrace();
 			System.out.println("===userController===");
 			
+			if(e.getMessage().contains("quota")) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("AI 답변을 생성할 토큰이 부족합니다.");
+			}
+			
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비정상적인 접근입니다.");
 		}
 	}
