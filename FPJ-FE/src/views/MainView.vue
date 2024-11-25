@@ -1,4 +1,4 @@
-<template>
+<template #content>
   <div class="card-stack-wrapper" @click.self="resetFocus">
     <FlipCard
       v-for="data in exerciseStore.randomExerciseData.value"
@@ -13,6 +13,7 @@
 import CardBase from '@/components/cards/CardBase.vue'
 import FlipCard from '@/components/cards/FlipCard.vue'
 import { useCardService } from '@/composables/data/useCardService'
+import SidepanelLayout from '@/layout/SidepanelLayout.vue'
 import { useExerciseStore } from '@/stores/exerciseStore'
 import { ref, onMounted } from 'vue'
 

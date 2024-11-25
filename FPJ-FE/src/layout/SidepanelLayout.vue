@@ -1,16 +1,14 @@
 <template>
   <div class="sidepanel-layout">
     <slot />
-    <slot name="navigations" />
+    <SidepanelNav />
   </div>
 </template>
 <script setup>
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
-import collectionIcon from '@/assets/collection_icon.svg'
-import userIcon from '@/assets/user_icon.svg'
-import preferenceIcon from '@/assets/preference_icon.svg'
+import SidepanelNav from '@/components/common/SidepanelNav.vue'
 </script>
 
 <style scoped>
@@ -22,15 +20,7 @@ import preferenceIcon from '@/assets/preference_icon.svg'
   display: flex;
   align-items: center;
   justify-content: center;
-background-image: linear-gradient(135deg, #d4d4d4 0%, #e2c8c3 100%);
-
+  background-image: linear-gradient(135deg, #d4d4d4 0%, #e2c8c3 100%);
   flex-direction: row;
-}
-
-.navigations {
-  position: fixed;
-  right: 0;
-  display: flex;
-  flex-direction: column;
 }
 </style>

@@ -21,7 +21,7 @@ const router = createRouter({
       path: '/auth',
       name: 'auth',
       component: AuthView,
-      meth: { title: '', layout: 'sidepanel' },
+      meta: { title: '', layout: 'sidepanel' },
     },
     {
       path: '/profile',
@@ -48,13 +48,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
   const { loginUser: user } = storeToRefs(authStore)
-  if (to.meta.requiresAuth && !user.value) {
-    next('/auth')
-  } else if (to.name === 'auth' && user.value?.userName) {
-    next(from)
+  const isAuthenticated = computed(() => !!user.value)
+
+  if (to.meta.requiresAuth && !isAuthenticated.value) {
+    next('/auth') // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
+  } else if (to.name === 'auth' && isAuthenticated.value) {
+    next('/') // 인증된 사용자는 메인 페이지로 리다이렉트
   } else {
-    next()
+    next() // 모든 조건을 통과하면 라우팅 허용
   }
 })
-
 export default router

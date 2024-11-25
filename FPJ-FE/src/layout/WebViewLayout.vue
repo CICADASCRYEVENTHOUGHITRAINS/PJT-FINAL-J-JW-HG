@@ -1,6 +1,6 @@
 <template>
   <div class="webview-layout">
-    <Header />
+    <WebViewNav />
     <section class="content-view">
       <InfoPanel />
       <slot />
@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import Header from '@/components/common/Header.vue'
+import WebViewNav from '@/components/common/WebViewNav.vue'
 import InfoPanel from '@/components/common/InfoPanel.vue'
 </script>
 <style scoped>
