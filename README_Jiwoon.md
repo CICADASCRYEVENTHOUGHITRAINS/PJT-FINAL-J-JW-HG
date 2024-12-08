@@ -35,7 +35,7 @@
 
 - 뷰, 컴포넌트 구조화 및 스타일링
 - Vue slot을 이용한 컴포넌트 재사용
-- 전역 상태 관리 Store와 action을 분리한 composable 구현
+- 전역 상태 관리를 위한 Store와 action을 분리한 composable 구현
 - 리팩토링
 
 ## 문제 상황
