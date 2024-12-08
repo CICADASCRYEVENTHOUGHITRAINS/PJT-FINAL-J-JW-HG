@@ -44,6 +44,9 @@
 - https://localhost:5173/\* 로 설정 시 해당 도메인에서 보내는 요청은 block. 와일드카드 없이 사용해야 한다.
 - 서버가 응답 가능한 상태인지 확인을 위해 프론트에서는 Preflight요청을 보내고, 서버에서 그에 보내는 응답을 받은 후 실제 요청을 보낸다. 이는 OPTIONS 요청인데, 사전에 백엔드에서 처리해주지 않으면 끊임없는 CORS오류를 겪게 된다.
 ```JAVA
+if (request.getMethod().equals("OPTIONS")) {
+  // Interceptor 내부 preHandle에 OPTIONS 요청을 확인하는 부분을 추가해 준다.
+}
 ``` 
 
 ### 일관적이지 못한 상태 변경, 상태 영속성
